@@ -7,11 +7,13 @@ var Stack = function() {
   StackInstance.storage = {};
   StackInstance.length = 0;
 
-  //Methods
-  StackInstance.push = stackMethods.push;
-  StackInstance.pop = stackMethods.pop;
-  StackInstance.size = stackMethods.size;
+  // //Methods
+  // StackInstance.push = stackMethods.push;
+  // StackInstance.pop = stackMethods.pop;
+  // StackInstance.size = stackMethods.size;
 
+  // StackInstance.methods = Object.create(stackMethods);
+  _.extend(StackInstance, stackMethods);
   return StackInstance;
 };
 
