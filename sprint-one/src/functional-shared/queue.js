@@ -1,36 +1,39 @@
 var Queue = function(){
   // Hey! Rewrite in the new style. Your code will wind up looking very similar,
   // but try not not reference your old code in writing the new style.
-  var someInstance = {};
-  someInstance.enqueue = queueMethods.enqueue;
-  someInstance.dequeue = queueMethods.dequeue;
-  someInstance.size = queueMethods.size;
 
-  someInstance.storage = {};
-  someInstance.counter = 0;
+  //Data
+  var QueueInstance = {};
+  QueueInstance.storage = {};
+  QueueInstance.length = 0;
 
-  return someInstance;
+  //Methods
+  QueueInstance.enqueue = queueMethods.enqueue;
+  QueueInstance.dequeue = queueMethods.dequeue;
+  QueueInstance.size    = queueMethods.size;
+
+  return QueueInstance;
 };
 
-var queueMethods = {};
+var queueMethods = {
 
-queueMethods.enqueue = function (value) {
-	this.storage[0] = value;
-	this.counter++;
+  enqueue : function (value) {
+    this.length++;
+    this.storage[this.length] = value;
+  },
+  dequeue : function () {
+    if (this.length > 0) {
+      for (var i = 0; i < this.length; i++) {
+        this.storage[i] = this.storage[i+1];
+      }
+      var result = this.storage[0];
+      delete this.storage[0];
+      delete this.storage[this.length];
+      this.length--;
+      return result;
+    }
+  },
+  size : function () {
+    return this.length;
+  }
 };
-
-queueMethods.dequeue = function () {
-	var value = this.storage[0];
-	delete this.storage[0];
-	this.counter--;
-	this.storage[0] = this.storage[1];
-	return value;
-};
-
-queueMethods.size = function () {
-	if (this.counter > 0) {
-		return this.counter;
-	} else {
-		return 0;
-	}
-};	
