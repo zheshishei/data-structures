@@ -1,12 +1,14 @@
-var HashTable = function(limit){
-  this._limit = limit || 8;
+var HashTable = function(){
+  this._limit = 8;
   this._storage = LimitedArray(this._limit);
   this._size = 0;
 };
 
 HashTable.prototype.insert = function(k, v){
-  if (this._size >= this._limit * 3 / 4) {
-    HashTable.prototype.resize(this, this._limit * 2);
+  if (this._size >= this._limit * 0.75) {
+    console.log('increasing because ' + k);
+    this.resize(this._limit * 2);
+    console.dir(this);
   }
   var i = getIndexBelowMaxForKey(k, this._limit);
   var tuple = [k,v];
@@ -23,6 +25,8 @@ HashTable.prototype.insert = function(k, v){
     this._storage.set(i, [tuple]);
   }
   this._size++;
+  // console.log("Table is: ");
+  // console.log(this);
 };
 
 HashTable.prototype.retrieve = function(k){
@@ -40,34 +44,35 @@ HashTable.prototype.retrieve = function(k){
 
 HashTable.prototype.remove = function(k){
   var i = getIndexBelowMaxForKey(k, this._limit);
-  var arr = this._storage.get(i);
-  if (Array.isArray(arr)) {
-    for (var index = 0; index < arr.length; index++) {
-      var tuple = arr.pop();
-      if (tuple[0] === k) {
+  var bucket = this._storage.get(i);
+
+  if (Array.isArray(bucket)) {
+    for (var index = 0; index < bucket.length; index++) {
+      if (bucket[index][0] === k) {
         this._size--;
-        return;
+        bucket.splice(index, 1);
       }
-      arr.shift(tuple);
     }
+  }
+
+  if (this._size < this._limit / 4) {
+    this.resize(Math.round(this._limit / 2));
   }
 };
 
-HashTable.prototype.resize = function(ourHash, newLimit) {
-  console.log('resizing');
-  console.log("Func args: " + arguments);
-  var newHashTable = new HashTable(newLimit);
-  newHashTable._size = ourHash._size;
-  ourHash._storage.each(function (arr) {
+HashTable.prototype.resize = function(newLimit) {
+  var ourHT = this;
+  var oldLimitedArray = ourHT._storage;
+  ourHT._storage = LimitedArray(newLimit);
+  ourHT._limit = newLimit;
+  ourHT._size = 0;
+  oldLimitedArray.each(function (arr) {
     if(arr !== undefined) {
       for (var i = 0; i < arr.length; i++) {
-       newHashTable.insert(arr[i][0], arr[i][1]);
+       ourHT.insert(arr[i][0], arr[i][1]);
       }
     }
   });
-  ourHash = newHashTable;
-  console.log("this hashTable");
-  console.dir(ourHash);
 };
 
 

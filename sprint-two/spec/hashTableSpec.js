@@ -42,7 +42,7 @@ describe('hashTable', function() {
   });
 
   // (Extra credit! Remove the extra "x" when you want the following tests to run)
-  it('should double in size when needed', function() {
+  it('shoulHashTabled double in size when needed', function() {
     _.each(people, function(person) {
       var firstName = person[0], lastName = person[1];
       hashTable.insert(firstName,lastName);
@@ -61,6 +61,7 @@ describe('hashTable', function() {
     hashTable.remove('Steven');
     hashTable.remove('John');
     hashTable.remove('Mr.');
+    //hashTable.remove('Alan');
     expect(hashTable._limit).to.equal(8);
   });
 });
