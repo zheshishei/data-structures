@@ -5,20 +5,13 @@ var HashTable = function () {
 };
 
 HashTable.prototype.insert = function (k, v) {
-  if (this._size < this._limit-1) {
-    HashTable.prototype.innerInsert.call(this._storage, this._limit, k, v);
-  } else {
-    this._limit *= 2;
-    var newStorage = LimitedArray(this._limit);
-    this._storage.each(function (arr, position) {
-      for (var i = 0; i < arr.length; i++) {
-        HashTable.prototype.innerInsert.call(newStorage, this._limit, arr[i][0], arr[i][1]);
-      }
-    });
-    HashTable.prototype.innerInsert.call(newStorage, this._limit, k, v);
-    this._storage = newStorage;
-  }
   this._size++;
+  if (this._size >= this._limit-1) {
+    this._limit *= 2;
+    this.resize(this._limit);
+  }
+
+  this.innerInsert.call(this._storage, this._limit, k, v);
 };
 
 HashTable.prototype.retrieve = function (k) {
@@ -45,28 +38,41 @@ HashTable.prototype.remove = function (k) {
       arr.shift(element); //else, add the element back to the array
     }
   }
-  /*
+
   if (this._size <= Math.round(this._limit/4)) {
-    this._limit /= 4;
-    var newStorage = LimitedArray(this._limit);
+    this._limit = this._limit / 2;
+    this.resize(this._limit);
   }
-  */
 };
 
-HashTable.prototype.innerInsert = function (limit, k, v) {
-    var obj = [k,v];
-    var i = getIndexBelowMaxForKey(k, limit);
-    var position = this.get(i);
-    if (position === undefined) { //if this position is open
-      var arr = [obj]; //create an array the k, v object
-      this.set(i, arr); //push this to the storage array
-    } else {
-      this.get(i).push(obj); //if an element currently exists
-      //push it to the array at the position
+HashTable.prototype.innerInsert = function (limitedArr, limit, k, v) {
+  var obj = [k,v];
+  var i = getIndexBelowMaxForKey(k, limit);
+  var position = this.get(i);
+  if (position === undefined) { //if this position is open
+    var arr = [obj]; //create an array the k, v object
+    limitedArr.set(i, arr); //push this to the storage array
+  } else {
+    limitedArr.get(i).push(obj); //if an element currently exists
+    //push it to the array at the position
+  }
+};
+
+HashTable.prototype.resize = function(limit) {
+  var newStorage = LimitedArray(limit);
+  console.dir(this._storage);
+  this._storage.each(function (arr) {
+    console.log('hit');
+    console.dir(this);
+    console.dir(arr);
+    //debugger;
+    for (var x = 0; x < arr.length; x++) {
+      console.log('hit2');
+      HashTable.prototype.innerInsert.call(newStorage, limit, arr[x][0], arr[x][1]);
     }
-  };
-
-
+  });
+  this._storage = newStorage;
+};
 
 /*
  * Complexity: What is the time complexity of the above functions?
