@@ -5,20 +5,19 @@ var HashTable = function () {
 };
 
 HashTable.prototype.insert = function (k, v) {
-  if (this._size < this._limit-1) {
-    HashTable.prototype.innerInsert.call(this._storage, this._limit, k, v);
-  } else {
-    this._limit *= 2;
-    var newStorage = LimitedArray(this._limit);
-    this._storage.each(function (arr, position) {
-      for (var i = 0; i < arr.length; i++) {
-        HashTable.prototype.innerInsert.call(newStorage, this._limit, arr[i][0], arr[i][1]);
-      }
-    });
-    HashTable.prototype.innerInsert.call(newStorage, this._limit, k, v);
-    this._storage = newStorage;
-  }
+  // if (this._size >= this._limit - 1) {
+  //   this._limit *= 2;
+  //   var newStorage = LimitedArray(this._limit);
+  //   this._storage.each(function (arr, position) {
+  //     for (var i = 0; i < arr.length; i++) {
+  //       HashTable.prototype.innerInsert.call(newStorage, this._limit, arr[i][0], arr[i][1]);
+  //     }
+  //   });
+  //   this._storage = newStorage;
+  // }
+  this.innerInsert.call(this._storage, this._limit, k, v);
   this._size++;
+  console.dir(this)
 };
 
 HashTable.prototype.retrieve = function (k) {
@@ -49,8 +48,13 @@ HashTable.prototype.remove = function (k) {
   if (this._size <= Math.round(this._limit/4)) {
     this._limit /= 4;
     var newStorage = LimitedArray(this._limit);
-  }
-  */
+    this._storage.each(function (arr, position) {
+      for (var i = 0; i < arr.length; i++) {
+        HashTable.prototype.innerInsert.call(newStorage, this._limit, arr[i][0], arr[i][1]);
+      }
+    });
+    this._storage = newStorage;
+  }*/
 };
 
 HashTable.prototype.innerInsert = function (limit, k, v) {
