@@ -50,6 +50,11 @@ BinarySearchTree.prototype.depthFirstLog = function (cb) {
   }
 };
 
+BinarySearchTree.prototype.breadthFirstLog = function (cb) {
+  cb(this.value);
+
+};
+
 
 /*
  * Complexity: What is the time complexity of the above functions?
