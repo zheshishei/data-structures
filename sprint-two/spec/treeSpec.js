@@ -64,4 +64,16 @@ describe('tree', function() {
     expect(detached.parent === undefined).to.equal(true);
   });
 
+  it('should implement traverse w/ a callback', function() {
+    tree.addChild(5);
+    tree.addChild(6);
+    tree.children[0].addChild(7);
+    tree.children[1].addChild(8);
+    tree.traverse(function (value) {
+      this.value *= 2;
+    });
+    expect(tree.children[0].value).to.equal(10);
+
+  });
+
 });

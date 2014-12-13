@@ -30,6 +30,15 @@ Tree.prototype.removeParent = function () {
   return this;
 };
 
+Tree.prototype.traverse = function (cb) {
+  if(this.value !== undefined) {
+    cb.call(this, this.value);
+  }
+  for (var i = 0; i < this.children.length; i++) {
+    this.children[i].traverse(cb);
+  }
+};
+
 
 /*
  * Complexity: What is the time complexity of the above functions?
