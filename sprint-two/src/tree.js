@@ -1,10 +1,11 @@
-var Tree = function(value){
+var Tree = function(value, parent){
   this.value = value;
   this.children = [];  // fix me
+  this.parent = parent;
 };
 
 Tree.prototype.addChild = function(value){
-  this.children.push(new Tree(value));
+  this.children.push(new Tree(value, this));
 };
 
 Tree.prototype.contains = function(target){
@@ -17,6 +18,16 @@ Tree.prototype.contains = function(target){
     }
   }
   return false;
+};
+
+Tree.prototype.removeParent = function () {
+  for (var i = 0; i < this.parent.children.length; i++) {
+    if (this.parent.children[i] === this) {
+      this.parent.children.splice(i, 1);
+    }
+  }
+  this.parent = undefined;
+  return this;
 };
 
 
