@@ -54,5 +54,31 @@ describe('binarySearchTree', function() {
     expect(array).to.eql([5,3,9,1,4,7,12,2,8,11,13]);
   });
 
+  it('should left Rotate (manual)', function(){
+    var array = [];
+    var func = function(value){ array.push(value); };
+    binarySearchTree.insert(3);
+    binarySearchTree.insert(9);
+    binarySearchTree.insert(1);
+    binarySearchTree.insert(7);
+    binarySearchTree.insert(12);
+    binarySearchTree.insert(8);
+    binarySearchTree.insert(11);
+    binarySearchTree.balance();
+    binarySearchTree.breadthFirstLog(func);
+    expect(array).to.eql([9,5,12,3,7,11,1,8]);
+  });
 
+  it('should right Rotate (manual)', function(){
+    var array = [];
+    var func = function(value){ array.push(value); };
+    binarySearchTree.insert(3);
+    binarySearchTree.insert(7);
+    binarySearchTree.insert(1);
+    binarySearchTree.insert(4);
+    binarySearchTree.insert(2);
+    binarySearchTree.balance();
+    binarySearchTree.breadthFirstLog(func);
+    expect(array).to.eql([3,1,5,2,4,7]);
+  });
 });

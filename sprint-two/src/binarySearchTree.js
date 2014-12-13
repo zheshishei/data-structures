@@ -3,7 +3,7 @@ var BinarySearchTree = function(value){
   this.left;
   this.right;
   this.parent;
-
+  this.height = 1;
 };
 
 BinarySearchTree.prototype.insert = function (value) {
@@ -22,6 +22,7 @@ BinarySearchTree.prototype.insert = function (value) {
       this.right.insert(value);
     }
   }
+  this.height = Math.max(this.left ? this.left.height : 0, this.right ? this.right.height : 0) + 1;
 };
 
 BinarySearchTree.prototype.contains = function (target) {
@@ -74,6 +75,7 @@ BinarySearchTree.prototype.balance = function () {
   var RH = this.right ? this.right.height : 0;
   var balanceFactor = LH - RH;
   if (balanceFactor < -1) {
+    console.log('left Rotate');
     //Left Rotate
     var temp = this.value;
     this.value = this.right.value;
@@ -107,7 +109,7 @@ BinarySearchTree.prototype.balance = function () {
       rootRight.parent = this.right;
     }
   }
-
+  console.dir(this);
 }
 
 
