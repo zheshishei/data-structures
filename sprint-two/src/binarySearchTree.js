@@ -69,6 +69,47 @@ BinarySearchTree.prototype.breadthFirstLog = function (cb) {
   }
 };
 
+BinarySearchTree.prototype.balance = function () {
+  var LH = this.left ? this.left.height : 0;
+  var RH = this.right ? this.right.height : 0;
+  var balanceFactor = LH - RH;
+  if (balanceFactor < -1) {
+    //Left Rotate
+    var temp = this.value;
+    this.value = this.right.value;
+    this.right.value = temp;
+    var rootLeft = this.left;
+    this.left = this.right;
+    this.right = this.left.right;
+    if (this.right !== undefined) {
+      this.right.parent = this;
+    }
+    this.left.right = this.left.left;
+    this.left.left = rootLeft;
+    if (rootLeft !== undefined) {
+      rootLeft.parent = this.left;
+    }
+  }
+  if (balanceFactor > 1) {
+    //Right Rotate
+    var temp = this.value;
+    this.value = this.left.value;
+    this.left.value = temp;
+    var rootRight = this.right;
+    this.right = this.left;
+    this.left = this.right.left;
+    if (this.left !== undefined) {
+      this.left.parent = this;
+    }
+    this.right.left = this.right.right;
+    this.right.right = rootRight;
+    if (rootRight !== undefined) {
+      rootRight.parent = this.right;
+    }
+  }
+
+}
+
 
 /*
  * Complexity: What is the time complexity of the above functions?
